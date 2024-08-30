@@ -2,13 +2,13 @@ import streamlit as st
 import pandas as pd
 
 def main():
-    st.sidebar.title("Navegação")
+    st.sidebar.title("Etapas do Processo - Seções")
     menu = ["Home", "Seleção de Serviço/Material", "Alternativas de Fornecedores", "Critérios de Avaliação"]
     choice = st.sidebar.selectbox("Escolha a seção", menu)
 
     if choice == "Home":
         st.title("Seleção de Fornecedores")
-        st.write("Bem-vindo ao sistema de seleção de fornecedores.")
+        st.write("O objetivo geral deste trabalho consiste em desenvolver um sistema de apoio a decisão (SAD) para a seleção de fornecedores dentro no âmbito da gestão de projetos considerando aspectos sustentáveis.")
     
     elif choice == "Seleção de Serviço/Material":
         st.title("Seleção de Serviço ou Material")
