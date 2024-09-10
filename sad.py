@@ -11,7 +11,6 @@ O processo de seleção de fornecedores de serviços de terraplanagem envolve cr
 Por favor, selecione os critérios que você deseja considerar e os fornecedores que serão avaliados.
 """)
 
-# Lista de critérios disponíveis
 criterios = {
     'C1': 'Preço/Custo do serviço',
     'C2': 'Qualidade',
@@ -28,7 +27,6 @@ criterios = {
     'C13': 'Reputação'
 }
 
-# Seleção de critérios pelo usuário
 st.write("### Selecione os critérios que você deseja incluir na avaliação:")
 criterios_selecionados = st.multiselect(
     "Critérios disponíveis", list(criterios.values()), default=list(criterios.values())
@@ -71,7 +69,6 @@ for fornecedor in fornecedores_selecionados:
             value=50
         )
 
-# Exibir o desempenho inserido
 st.write("### Desempenho dos Fornecedores:")
 df_desempenho = pd.DataFrame(desempenho_fornecedores)
 st.dataframe(df_desempenho)
