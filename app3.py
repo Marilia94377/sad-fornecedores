@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Dados dos fornecedores
+# Dados dos fornecedores com base no estudo de caso
 data = {
     'Fornecedor': ['D1', 'D2', 'D3', 'D4', 'D5'],
     'Econômico': [6, 9, 8, 7, 1],
@@ -30,10 +30,15 @@ fornecedores_selecionados = st.multiselect(
     default=df['Fornecedor'].tolist()
 )
 
-# Ajuste de pesos para os critérios selecionados
+# Ajuste de pesos para os critérios selecionados com base no estudo de caso
 pesos = {}
 for criterio in criterios_selecionados:
-    pesos[criterio] = st.slider(f"Peso para o critério {criterio}", 0.0, 1.0, 0.3)
+    if criterio == 'Econômico':
+        pesos[criterio] = st.slider(f"Peso para o critério {criterio}", 0.0, 1.0, 0.5)  # Peso ajustado para refletir maior importância
+    elif criterio == 'Ambiental':
+        pesos[criterio] = st.slider(f"Peso para o critério {criterio}", 0.0, 1.0, 0.5)  # Peso ajustado para refletir maior importância
+    else:
+        pesos[criterio] = st.slider(f"Peso para o critério {criterio}", 0.0, 1.0, 0.25)  # Peso menor para o critério social
 
 # Filtrar o DataFrame com base nas seleções do usuário
 df_filtrado = df[df['Fornecedor'].isin(fornecedores_selecionados)][['Fornecedor'] + criterios_selecionados]
@@ -77,14 +82,22 @@ st.dataframe(df_resultado)
 fig = px.bar(df_resultado, x='Fornecedor', y='Fluxo Líquido', title="Fluxo Líquido dos Fornecedores")
 st.plotly_chart(fig)
 
+# Formulário para gerar novos resultados com base em seleções
 with st.form("Formulário de Seleção"):
-    criterios_selecionados = st.multiselect("Critérios disponíveis", ["Econômico", "Ambiental", "Social"], default=["Econômico"])
+    criterios_selecionados = st.multiselect("Critérios disponíveis", ["Econômico", "Ambiental", "Social"], default=["Econômico", "Ambiental", "Social"])
     fornecedores_selecionados = st.multiselect("Fornecedores disponíveis", df['Fornecedor'].tolist(), default=df['Fornecedor'].tolist())
+    
+    # Ajuste de pesos novamente no formulário
     pesos = {}
     for criterio in criterios_selecionados:
-        pesos[criterio] = st.slider(f"Peso para o critério {criterio}", 0.0, 1.0, 0.3)
-
-    # Botão para submeter
+        if criterio == 'Econômico':
+            pesos[criterio] = st.slider(f"Peso para o critério {criterio}", 0.0, 1.0, 0.5)
+        elif criterio == 'Ambiental':
+            pesos[criterio] = st.slider(f"Peso para o critério {criterio}", 0.0, 1.0, 0.5)
+        else:
+            pesos[criterio] = st.slider(f"Peso para o critério {criterio}", 0.0, 1.0, 0.25)
+    
+    # Botão para submeter o formulário
     submit_button = st.form_submit_button("Gerar Resultados")
 
 if submit_button:
