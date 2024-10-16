@@ -150,11 +150,11 @@ def tela_sistema():
                 }
 
             # Desempenho do fornecedor no critério (Escala de 1 a 5)
-            desempenho_fornecedores[fornecedor][criterio] = st.slider(f"Desempenho de {fornecedor} no critério {criterio} (1 a 5)", 1, 5, 3, key=f"desempenho_{fornecedor}_{criterio}")
+            desempenho_fornecedores[fornecedor][criterio] = st.slider(f"Escala qualitativa do {fornecedor} no critério {criterio} (1 a 5)", 1, 5, 3, key=f"desempenho_{fornecedor}_{criterio}")
 
     # Transformar os dados de desempenho em um DataFrame
     df_desempenho = pd.DataFrame(desempenho_fornecedores).T
-    st.write("### Desempenho dos Fornecedores:")
+    st.write("### Matriz de Consequência:")
     st.dataframe(df_desempenho)
 
     # Normalização e cálculos
