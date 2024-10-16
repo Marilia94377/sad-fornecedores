@@ -11,13 +11,29 @@ st.markdown(
         background-color: white;
         color: black;
     }
-    h1, h2, h3, h4, h5, h6, p {
+    h1 {
+        font-size: 24px;  /* Diminuir o tamanho do título */
+        color: #42434A;  /* Garantir que o título seja preto */
+    }
+    h2, h3, h4, h5, h6, p {
         color: black;  /* Garantir que todos os textos sejam pretos */
     }
     .gray-background {
         background-color: #f0f0f0;  /* Cinza claro */
-        padding: 100px;  /* Espaçamento interno */
-        border-radius: 5px;  /* Bordas arredondadas */
+        padding: 12px;  /* Espaçamento interno */
+        border-radius: 20px;  /* Bordas arredondadas */
+        border: 1px solid #d9d9d9;  /* Borda cinza */
+    }
+     div.stButton > button {
+        color: white;  /* Cor do texto do botão */
+        background-color: #4CAF50;  /* Cor de fundo do botão */
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        font-size: 16px;
+        margin: 4px 2px;
+        border-radius: 8px;
+        cursor: pointer;
     }
     </style>
     """,
@@ -26,43 +42,51 @@ st.markdown(
 
 # Etapa 0: Tela inicial explicativa
 def tela_inicial():
-    col1, col2 = st.columns([1, 2])  # Ajuste as proporções conforme necessário
+    col1, col2 = st.columns([1, 2])
     with col1:
-        st.image("/home/maria/sad-fornecedores/pmd.jpg", caption="PMD - UFPE", width=200)
+        st.image("/home/maria/sad-fornecedores/pmd.jpg", 
+        caption="Project Management  Group",
+        width=215)
 
     with col2:
-        # Componente com fundo cinza claro
-        with st.container():
-            st.markdown("<div class='gray-background'>", unsafe_allow_html=True)
-            st.title("Sistema de Apoio à Decisão para a Seleção de Fornecedores Sustentáveis em Projetos")
-            st.markdown("</div>", unsafe_allow_html=True)
-    
-    st.write("""
-    Bem-vindo ao Sistema de Apoio à Decisão (PROMETHEE II), criado para ajudar empresas na seleção de fornecedores sustentáveis, considerando critérios econômicos, sociais e ambientais.
-    """)
+        st.markdown("<div class='gray-background' ><h1>Sistema de Apoio à Decisão para a Seleção de Fornecedores Sustentáveis em Projetos</h1></div>", unsafe_allow_html=True)
 
-    st.write("Este sistema foi desenvolvido no laboratório Project Management and Development - Research Group da UFPE.")
+    st.write("""
+    Bem-vindo ao Sistema de Apoio à Decisão, 
+    criado para ajudar empresas na seleção de fornecedores sustentáveis, 
+    considerando critérios econômicos, sociais e ambientais.""")
+
+    st.write("Este sistema foi desenvolvido no laboratório Project Management and Development - Research Group do Departamento de Engenharia de Produção da Universidade Federal de Pernambuco (UFPE).")
     
     st.write("""
-    O crescente interesse por práticas empresariais sustentáveis tem impulsionado a necessidade de ferramentas que auxiliem na seleção de fornecedores, considerando critérios que vão além do custo e da qualidade. Este sistema foi desenvolvido para aplicar o modelo PROMETHEE II, permitindo uma análise multicritério e comparações estruturadas entre fornecedores.
+    O crescente interesse por práticas empresariais 
+    sustentáveis tem impulsionado a necessidade de ferramentas 
+    que auxiliem na seleção de fornecedores, 
+    considerando critérios que vão além do custo e da qualidade. 
+    Este sistema foi desenvolvido para aplicar o modelo PROMETHEE II, 
+    permitindo uma análise multicritério e comparações estruturadas entre fornecedores.
     """)
-    
-    st.write("#### Desenvolvedores do modelo e do sistema:")
+    st.write("")
+
+
+    st.markdown("<div class='gray-background'><h5>Conheça quem está por trás da idealização desta solução</h5></div>", unsafe_allow_html=True)
+    st.write("")
+    st.write("")
+
     dev1_col, dev2_col, dev3_col = st.columns(3)
 
     with dev1_col:
-        st.image("/home/maria/sad-fornecedores/marilia.jpg", width=200)
-        st.markdown("<p style='color: black;'>Marília Martins - Desenvolvedora do Modelo Teórico</p>", unsafe_allow_html=True)
-
-    with dev2_col:
         st.image("/home/maria/sad-fornecedores/Luciana.jpg", width=200)
         st.markdown("<p style='color: black;'>Prof.ª Dr.ª Luciana Hazin Alencar - Orientadora</p>", unsafe_allow_html=True)
 
+    with dev2_col:
+        st.image("/home/maria/sad-fornecedores/marilia.jpg", width=200)
+        st.markdown("<p style='color: black;'>Mestre Marília Martins - Desenvolvedora do Modelo Teórico</p>", unsafe_allow_html=True)
+        
     with dev3_col:
         st.image("/home/maria/sad-fornecedores/maria.jpg", width=200)
-        st.markdown("<p style='color: black;'>Maria Geyzianny - Aluna de Iniciação Científica e Desenvolvedora do Sistema</p>", unsafe_allow_html=True)
+        st.markdown("<p style='color: black;'>Maria Geyzianny - Desenvolvedora do Sistema</p>", unsafe_allow_html=True)
         
-
 
 if "tela_inicial" not in st.session_state:
     tela_inicial()
