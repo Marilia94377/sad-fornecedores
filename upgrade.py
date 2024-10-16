@@ -73,7 +73,7 @@ def tela_inicial():
     O crescente interesse por práticas empresariais sustentáveis tem impulsionado a necessidade de ferramentas que auxiliem na seleção de fornecedores, considerando critérios que vão além do custo e da qualidade. Este sistema foi desenvolvido para aplicar o modelo PROMETHEE II, permitindo uma análise multicritério e comparações estruturadas entre fornecedores.
     """)
 
-    st.markdown("<div class='gray-background'><h5>Conheça quem está por trás da idealização desta solução</h5></div>", unsafe_allow_html=True)
+    st.markdown("<div class='gray-background'><h5>Conheça quem está por trás da idealização desta solução inovadora: </h5></div>", unsafe_allow_html=True)
 
     # Adicionar espaçamento antes das imagens das desenvolvedoras
     st.markdown('<div class="spacer"></div>', unsafe_allow_html=True)
