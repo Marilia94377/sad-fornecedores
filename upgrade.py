@@ -91,8 +91,8 @@ def tela_inicial():
 
 # Função para a tela do sistema com cálculo do PROMETHEE II
 def tela_sistema():
-    st.title("Aplicação do Modelo Proposto - PROMETHEE II")
-    st.subheader("Configurações do Modelo de Decisão")
+    st.title("Aplicação do Modelo - PROMETHEE II")
+    # st.subheader("Configurações do Modelo de Decisão")
 
     st.write("""
     Selecione os critérios e fornecedores a serem usados na avaliação. Para cada fornecedor, atribua pesos, defina se os critérios devem ser maximizados ou minimizados, escolha a função de preferência e insira o desempenho em uma escala de 1 a 5.
@@ -100,7 +100,7 @@ def tela_sistema():
 
     # Lista de fornecedores e critérios
     fornecedores_disponiveis = ['Fornecedor A', 'Fornecedor B', 'Fornecedor C', 'Fornecedor D', 'Fornecedor E', 'Fornecedor F']
-    criterios_disponiveis = ['C1 - Preço/Custo do serviço', 'C2 - Qualidade', 'C3 - Entrega', 'C4 - Tecnologia', 
+    criterios_disponiveis = ['C1 - Preço', 'C2 - Qualidade', 'C3 - Entrega', 'C4 - Tecnologia', 
                              'C5 - Custos ambientais', 'C6 - Projeto verde', 'C7 - Gestão ambiental', 
                              'C8 - Partes interessadas (direito, atendimento)', 'C9 - Segurança e saúde no trabalho', 
                              'C10 - Respeito pela política dos funcionários', 'C11 - Gestão social', 
@@ -118,7 +118,7 @@ def tela_sistema():
     desempenho_fornecedores = {}
 
     for fornecedor in fornecedores_selecionados:
-        st.write(f"### Configurações para {fornecedor}")
+        st.write(f"#### Configurações para {fornecedor}")
 
         desempenho_fornecedores[fornecedor] = {}
         pesos[fornecedor] = {}
@@ -170,8 +170,8 @@ def tela_sistema():
         return df_normalizado
 
     df_normalizado = normalizar(df_desempenho, {criterio: max_min_criterios[fornecedores_selecionados[0]][criterio] for criterio in criterios_selecionados})
-    st.write("### Matriz de Consequência Normalizada:")
-    st.dataframe(df_normalizado)
+    # st.write("### Matriz de Consequência Normalizada:")
+    # st.dataframe(df_normalizado)
 
     # Aplicar função de preferência
     def aplicar_funcao_preferencia(funcao, diferenca, parametros):
