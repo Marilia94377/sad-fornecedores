@@ -130,7 +130,7 @@ def tela_sistema():
             st.write(f"#### Critério: {criterio}")
 
             # Atribuição de peso para o critério e fornecedor
-            pesos[fornecedor][criterio] = st.number_input(f"Peso para {criterio} de {fornecedor} (0 a 100)", min_value=0.0, max_value=100.0, value=50.0, key=f"peso_{fornecedor}_{criterio}")
+            pesos[fornecedor][criterio] = st.number_input(f"Peso para {criterio} de {fornecedor}", min_value=0.0, max_value=100.0, value=50.0, key=f"peso_{fornecedor}_{criterio}")
             max_min_criterios[fornecedor][criterio] = st.selectbox(f"O critério {criterio} de {fornecedor} deve ser:", ['Maximizado', 'Minimizado'], key=f"max_min_{fornecedor}_{criterio}")
 
             # Função de preferência para o critério e fornecedor

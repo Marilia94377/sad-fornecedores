@@ -111,7 +111,7 @@ Usando o método PROMETHEE II, calculamos os fluxos positivos, negativos e líqu
 
 # Dados calculados dos fluxos (Tabela 28)
 fluxos = {
-    'Fornecedor': ['Fornecedor 1', 'Fornecedor 4', 'Fornecedor 3', 'Fornecedor 2'],
+    'Fornecedor': ['Fornecedor A', 'Fornecedor D', 'Fornecedor C', 'Fornecedor B'],
     'Fluxo Positivo (ϕ+)': [0.5622, 0.5215, 0.2207, 0.2439],
     'Fluxo Negativo (ϕ-)': [0.1219, 0.2555, 0.5157, 0.6551],
     'Fluxo Líquido (ϕ)': [0.4402, 0.2660, -0.2950, -0.4112]
