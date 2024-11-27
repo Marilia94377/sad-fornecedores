@@ -141,12 +141,12 @@ def tela_sistema():
             # Parâmetros para a função de preferência, se aplicável
             if funcao in ['U-Shape', 'V-Shape', 'Level', 'V-Shape I']:
                 parametros_preferencia[fornecedor][criterio] = {
-                    'q': st.number_input(f"Limiar de indiferença (q) para {criterio} de {fornecedor}", min_value=0.0, value=10.0, key=f"q_{fornecedor}_{criterio}"),
-                    'r': st.number_input(f"Limiar de preferência (r) para {criterio} de {fornecedor}", min_value=0.0, value=20.0, key=f"r_{fornecedor}_{criterio}")
+                    'q': st.number_input(f"Limiar de indiferença (q) para {criterio} de {fornecedor}", min_value=0.0, key=f"q_{fornecedor}_{criterio}"),
+                    'r': st.number_input(f"Limiar de preferência (r) para {criterio} de {fornecedor}", min_value=0.0, key=f"r_{fornecedor}_{criterio}")
                 }
             elif funcao == 'Gaussian':
                 parametros_preferencia[fornecedor][criterio] = {
-                    's': st.number_input(f"Parâmetro s para função Gaussian para {criterio} de {fornecedor}", min_value=0.1, max_value=10.0, value=1.0, key=f"s_{fornecedor}_{criterio}")
+                    's': st.number_input(f"Parâmetro s para função Gaussian para {criterio} de {fornecedor}", min_value=0.1, max_value=10.0, key=f"s_{fornecedor}_{criterio}")
                 }
 
             # Desempenho do fornecedor no critério (Escala de 1 a 5)
