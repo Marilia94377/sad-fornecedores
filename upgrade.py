@@ -130,7 +130,7 @@ def tela_sistema():
             st.write(f"#### Critério: {criterio}")
 
             # Atribuição de peso para o critério e fornecedor
-            pesos[fornecedor][criterio] = st.number_input(f"Peso para {criterio} de {fornecedor}", min_value=0.0, max_value=100.0, value=50.0, key=f"peso_{fornecedor}_{criterio}")
+            pesos[fornecedor][criterio] = st.number_input(f"Peso para {criterio} de {fornecedor}", min_value=0.0, key=f"peso_{fornecedor}_{criterio}")
             max_min_criterios[fornecedor][criterio] = st.selectbox(f"O critério {criterio} de {fornecedor} deve ser:", ['Maximizado', 'Minimizado'], key=f"max_min_{fornecedor}_{criterio}")
 
             # Função de preferência para o critério e fornecedor
@@ -141,8 +141,8 @@ def tela_sistema():
             # Parâmetros para a função de preferência, se aplicável
             if funcao in ['U-Shape', 'V-Shape', 'Level', 'V-Shape I']:
                 parametros_preferencia[fornecedor][criterio] = {
-                    'q': st.number_input(f"Limiar de indiferença (q) para {criterio} de {fornecedor}", min_value=0.0, max_value=100.0, value=10.0, key=f"q_{fornecedor}_{criterio}"),
-                    'r': st.number_input(f"Limiar de preferência (r) para {criterio} de {fornecedor}", min_value=0.0, max_value=100.0, value=20.0, key=f"r_{fornecedor}_{criterio}")
+                    'q': st.number_input(f"Limiar de indiferença (q) para {criterio} de {fornecedor}", min_value=0.0, value=10.0, key=f"q_{fornecedor}_{criterio}"),
+                    'r': st.number_input(f"Limiar de preferência (r) para {criterio} de {fornecedor}", min_value=0.0, value=20.0, key=f"r_{fornecedor}_{criterio}")
                 }
             elif funcao == 'Gaussian':
                 parametros_preferencia[fornecedor][criterio] = {
