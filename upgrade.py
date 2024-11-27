@@ -58,7 +58,7 @@ st.markdown(
 def tela_inicial():
     col1, col2 = st.columns([1, 2])
     with col1:
-        st.image("/home/maria/sad-fornecedores/pmd.jpg", caption="Project Management Group", width=215)
+        st.image("./pmd.jpg", caption="Project Management Group", width=215)
 
     with col2:
         st.markdown("<div class='gray-background' ><h1>Sistema de Apoio à Decisão para a Seleção de Fornecedores Sustentáveis em Projetos</h1></div>", unsafe_allow_html=True)
@@ -80,13 +80,13 @@ def tela_inicial():
 
     dev1_col, dev2_col, dev3_col = st.columns(3)
     with dev1_col:
-        st.image("/home/maria/sad-fornecedores/Luciana.jpg", width=200)
+        st.image("./Luciana.jpg", width=200)
         st.markdown("<p style='color: black;'>Prof.ª Dr.ª Luciana Hazin Alencar - Orientadora</p>", unsafe_allow_html=True)
     with dev2_col:
-        st.image("/home/maria/sad-fornecedores/marilia.jpg", width=200)
+        st.image("./marilia.jpg", width=200)
         st.markdown("<p style='color: black;'>Mestre Marília Martins - Desenvolvedora do Modelo Teórico</p>", unsafe_allow_html=True)
     with dev3_col:
-        st.image("/home/maria/sad-fornecedores/maria.jpg", width=200)
+        st.image("./maria.jpg", width=200)
         st.markdown("<p style='color: black;'>Maria Geyzianny - Desenvolvedora do Sistema</p>", unsafe_allow_html=True)
 
 # Função para a tela do sistema com cálculo do PROMETHEE II
