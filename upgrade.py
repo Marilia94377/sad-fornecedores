@@ -111,6 +111,7 @@ def tela_sistema():
     criterios_selecionados = st.multiselect("Selecione os critérios que serão usados", criterios_disponiveis, default=criterios_disponiveis)
 
     # Atribuição de Pesos, Maximização/Minimização, Funções de Preferência e Desempenho
+    valores = {}
     pesos = {}
     max_min_criterios = {}
     funcoes_preferencia = {}
@@ -121,21 +122,40 @@ def tela_sistema():
         st.write(f"#### Configurações para {fornecedor}")
 
         desempenho_fornecedores[fornecedor] = {}
+        valores[fornecedor] = {}
         pesos[fornecedor] = {}
         max_min_criterios[fornecedor] = {}
         funcoes_preferencia[fornecedor] = {}
         parametros_preferencia[fornecedor] = {}
+        # Define the classification of each criterion
+        criterios_classificacao = {
+            'C1 - Preço': 'Quantitativo',
+            'C2 - Qualidade': 'Qualitativo',
+            'C3 - Entrega': 'Quantitativo',
+            'C4 - Tecnologia': 'Qualitativo',
+            'C5 - Custos ambientais': 'Quantitativo',
+            'C6 - Projeto verde': 'Qualitativo',
+            'C7 - Gestão ambiental': 'Qualitativo',
+            'C8 - Partes interessadas (direito, atendimento)': 'Qualitativo',
+            'C9 - Segurança e saúde no trabalho': 'Quantitativo',
+            'C10 - Respeito pela política dos funcionários': 'Qualitativo',
+            'C11 - Gestão social': 'Qualitativo',
+            'C12 - Histórico de desempenho': 'Quantitativo',
+            'C13 - Reputação': 'Qualitativo'
+        }
 
+        # Loop through each criterion and display the appropriate input widget
         for criterio in criterios_selecionados:
             st.write(f"#### Critério: {criterio}")
 
             # Atribuição de peso para o critério e fornecedor
+            valores[fornecedor][criterio] = st.number_input(f"Valor para {criterio} de {fornecedor}", min_value=0.0, key=f"valor_{fornecedor}_{criterio}")
             pesos[fornecedor][criterio] = st.number_input(f"Peso para {criterio} de {fornecedor}", min_value=0.0, key=f"peso_{fornecedor}_{criterio}")
             max_min_criterios[fornecedor][criterio] = st.selectbox(f"O critério {criterio} de {fornecedor} deve ser:", ['Maximizado', 'Minimizado'], key=f"max_min_{fornecedor}_{criterio}")
 
             # Função de preferência para o critério e fornecedor
             funcao = st.selectbox(f"Função de preferência para {criterio} de {fornecedor}", 
-                                  ['Linear', 'U-Shape', 'V-Shape', 'Level', 'V-Shape I', 'Gaussian'], key=f"pref_{fornecedor}_{criterio}")
+                                ['Linear', 'U-Shape', 'V-Shape', 'Level', 'V-Shape I', 'Gaussian'], key=f"pref_{fornecedor}_{criterio}")
             funcoes_preferencia[fornecedor][criterio] = funcao
 
             # Parâmetros para a função de preferência, se aplicável
@@ -149,9 +169,10 @@ def tela_sistema():
                     's': st.number_input(f"Parâmetro s para função Gaussian para {criterio} de {fornecedor}", min_value=0.1, max_value=10.0, key=f"s_{fornecedor}_{criterio}")
                 }
 
-            # Desempenho do fornecedor no critério (Escala de 1 a 5)
-            desempenho_fornecedores[fornecedor][criterio] = st.slider(f"Escala qualitativa do {fornecedor} no critério {criterio} (1 a 5)", 1, 5, 3, key=f"desempenho_{fornecedor}_{criterio}")
-
+            # Display the appropriate input widget based on the criterion type
+            if criterios_classificacao[criterio] == 'Qualitativo':
+                desempenho_fornecedores[fornecedor][criterio] = st.slider(f"Escala qualitativa do {fornecedor} no critério {criterio} (1 a 5)", 1, 5, 3, key=f"desempenho_{fornecedor}_{criterio}")
+        
     # Transformar os dados de desempenho em um DataFrame
     df_desempenho = pd.DataFrame(desempenho_fornecedores).T
     st.write("### Matriz de Consequência:")
