@@ -3,7 +3,11 @@ import pandas as pd
 import plotly.express as px
 import math
 
+# ===================================
+# Estilo Visual
+# ===================================
 # Definir a cor de fundo do site para branco
+
 st.markdown(
     """
     <style>
@@ -54,7 +58,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Função para a tela inicial
+# ===================================
+# Tela Inicial
+# ===================================
+
 def tela_inicial():
     col1, col2 = st.columns([1, 2])
     with col1:
@@ -89,170 +96,219 @@ def tela_inicial():
         st.image("./maria.jpg", width=200)
         st.markdown("<p style='color: black;'>Maria Geyzianny - Desenvolvedora do Sistema</p>", unsafe_allow_html=True)
 
-# Função para a tela do sistema com cálculo do PROMETHEE II
+# ===================================
+# 🔧 Função das Preferências
+# ===================================
+def aplicar_funcao_preferencia(funcao, diferenca, parametros):
+    if funcao == 'Linear':
+        return max(0, min(1, diferenca))
+    elif funcao == 'U-Shape':
+        q = parametros.get('q', 0)
+        return 1 if diferenca > q else 0
+    elif funcao == 'V-Shape':
+        r = parametros.get('r', 1e-6)
+        return min(diferenca / r, 1) if diferenca > 0 else 0
+    elif funcao == 'Level':
+        q = parametros.get('q', 0)
+        r = parametros.get('r', 1e-6)
+        if diferenca <= q:
+            return 0
+        elif q < diferenca <= r:
+            return 0.5
+        else:
+            return 1
+    elif funcao == 'V-Shape with Indifference':
+        q = parametros.get('q', 0)
+        r = parametros.get('r', 1e-6)
+        if diferenca <= q:
+            return 0
+        else:
+            return min((diferenca - q) / (r - q), 1)
+    elif funcao == 'Gaussian':
+        s = parametros.get('s', 1)
+        return 1 - math.exp(- (diferenca ** 2) / (2 * (s ** 2)))
+    else:
+        return 0
+    
+# ===================================
+# 🔧 Tela do Sistema
+# ===================================
 def tela_sistema():
     st.title("Aplicação do Modelo - PROMETHEE II")
-    # st.subheader("Configurações do Modelo de Decisão")
 
     st.write("""
-    Selecione os critérios e fornecedores a serem usados na avaliação. Para cada fornecedor, atribua pesos, defina se os critérios devem ser maximizados ou minimizados, escolha a função de preferência e insira o desempenho em uma escala de 1 a 5.
+    Selecione os critérios e os fornecedores que serão avaliados.  
+    Para cada **critério**, atribua um **peso**, defina se deve ser **maximizado ou minimizado**, escolha a **função de preferência** e insira o **desempenho de cada fornecedor**.  
+    🔸 **A escala de 1 a 5 é utilizada apenas para os critérios qualitativos.**  
+    🔸 Para os critérios quantitativos, insira o **valor numérico correspondente**.
     """)
 
-# =============================
-# DEFINIR DESCRIÇÕES DOS CRITÉRIOS E ESCALAS
-# =============================
-descricao_criterios = {
-    'C1 - Preço': 'Valor monetário em reais. (↓ Minimizar)',
-    'C2 - Qualidade': 'Avaliação da qualidade dos produtos ou serviços.',
-    'C3 - Entrega': 'Prazo de entrega em dias. (↓ Minimizar)',
-    'C4 - Tecnologia': 'Nível de inovação e uso de tecnologias.',
-    'C5 - Custos ambientais': 'Custos relacionados ao impacto ambiental em milhões. (↓ Minimizar)',
-    'C6 - Projeto verde': 'Grau de adoção de práticas sustentáveis.',
-    'C7 - Gestão ambiental': 'Eficácia do sistema de gestão ambiental.',
-    'C8 - Partes interessadas (direito, atendimento)': 'Comprometimento com direitos e atendimento.',
-    'C9 - Segurança e saúde no trabalho': 'Taxa de acidentes. (↓ Minimizar)',
-    'C10 - Respeito pela política dos funcionários': 'Cumprimento das políticas e direitos dos colaboradores.',
-    'C11 - Gestão social': 'Capacidade de implementar práticas de gestão social.',
-    'C12 - Histórico de desempenho': 'Número de anos em operação. (↑ Maximizar)',
-    'C13 - Reputação': 'Análise de reputação (mídia, avaliações e prêmios).',
-    'C14 - Logística e localização': 'Distância em quilômetros. (↓ Minimizar)'
-}
+    fornecedores = ['Fornecedor A', 'Fornecedor B', 'Fornecedor C',
+                    'Fornecedor D', 'Fornecedor E', 'Fornecedor F']
+    criterios = [
+        'C1 - Preço', 'C2 - Qualidade', 'C3 - Entrega', 'C4 - Tecnologia',
+        'C5 - Custos ambientais', 'C6 - Projeto verde', 'C7 - Gestão ambiental',
+        'C8 - Partes interessadas', 'C9 - Segurança e saúde no trabalho',
+        'C10 - Respeito pela política dos funcionários', 'C11 - Gestão social',
+        'C12 - Histórico de desempenho', 'C13 - Reputação', 'C14 - Logística'
+    ]
 
-# Definir quais são qualitativos e quais são quantitativos
-criterios_qualitativos = ['C2 - Qualidade', 'C4 - Tecnologia', 'C6 - Projeto verde', 'C7 - Gestão ambiental',
-                           'C8 - Partes interessadas (direito, atendimento)', 'C10 - Respeito pela política dos funcionários',
-                           'C11 - Gestão social', 'C13 - Reputação']
-criterios_quantitativos = ['C1 - Preço', 'C3 - Entrega', 'C5 - Custos ambientais', 'C9 - Segurança e saúde no trabalho',
-                            'C12 - Histórico de desempenho', 'C14 - Logística e localização']
+    criterios_qualitativos = ['C2 - Qualidade', 'C4 - Tecnologia', 'C6 - Projeto verde',
+                               'C7 - Gestão ambiental', 'C8 - Partes interessadas',
+                               'C10 - Respeito pela política dos funcionários',
+                               'C11 - Gestão social', 'C13 - Reputação']
 
-# =============================
-# FUNÇÃO PARA TELA INICIAL
-# =============================
-def tela_inicial():
-    st.title("Sistema de Apoio à Decisão - PROMETHEE II")
-    st.subheader("Seleção de Fornecedores Sustentáveis")
+    criterios_quantitativos = ['C1 - Preço', 'C3 - Entrega', 'C5 - Custos ambientais',
+                                'C9 - Segurança e saúde no trabalho',
+                                'C12 - Histórico de desempenho', 'C14 - Logística']
 
-    st.markdown("""
-    Este sistema permite avaliar e selecionar fornecedores sustentáveis com base em critérios econômicos, ambientais e sociais, utilizando o método PROMETHEE II.
-    
-    **Desenvolvido por:**  
-    - Prof.ª Dr.ª Luciana Hazin Alencar (Orientadora)  
-    - Marília Martins (Modelo Teórico)  
-    - Maria Geyzianny (Desenvolvimento do Sistema)  
-    """)
-
-# =============================
-# FUNÇÃO PARA TELA DO SISTEMA
-# =============================
-def tela_sistema():
-    st.header("Configuração do Modelo PROMETHEE II")
-
-    fornecedores = st.multiselect(
-        "Selecione os fornecedores para análise:",
-        ['Fornecedor A', 'Fornecedor B', 'Fornecedor C', 'Fornecedor D'],
-        default=['Fornecedor A', 'Fornecedor B']
+    fornecedores_selecionados = st.multiselect(
+        "Selecione os fornecedores:",
+        fornecedores,
+        default=fornecedores
     )
 
-    criterios = st.multiselect(
+    criterios_selecionados = st.multiselect(
         "Selecione os critérios:",
-        list(descricao_criterios.keys()),
-        default=list(descricao_criterios.keys())
+        criterios,
+        default=criterios
     )
 
-    st.subheader("Preenchimento dos Dados")
-
-    dados = {}
+    # ==============================
+    # 📥 Entrada dos Dados
+    # ==============================
     pesos = {}
     objetivo = {}
+    funcoes_preferencia = {}
+    parametros_preferencia = {}
+    desempenho = {}
 
-    for crit in criterios:
-        st.markdown(f"### Critério: {crit}")
-        st.info(descricao_criterios[crit])
+    for criterio in criterios_selecionados:
+        st.markdown(f"### Critério: {criterio}")
 
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
+
         with col1:
-            pesos[crit] = st.number_input(f"Peso do critério **{crit}**", min_value=0.0, value=1.0)
+            pesos[criterio] = st.number_input(
+                f"Peso do critério {criterio}",
+                min_value=0.0,
+                value=1.0
+            )
 
         with col2:
-            objetivo[crit] = st.radio(f"O critério **{crit}** deve ser:",
-                                      ['Maximizar', 'Minimizar'],
-                                      horizontal=True)
+            objetivo[criterio] = st.radio(
+                f"O critério {criterio} deve ser:",
+                ['Maximizado', 'Minimizado'],
+                horizontal=True
+            )
 
-        for forn in fornecedores:
-            if forn not in dados:
-                dados[forn] = {}
-            if crit in criterios_qualitativos:
-                tooltip = """
-                1 = Muito Fraco | 2 = Fraco | 3 = Médio | 4 = Bom | 5 = Excelente
-                """
-                dados[forn][crit] = st.slider(
-                    f"Desempenho de {forn} em {crit}",
-                    1, 5, 3,
-                    help=tooltip
+        with col3:
+            func = st.selectbox(
+                f"Função de preferência para {criterio}",
+                ['Linear', 'U-Shape', 'V-Shape', 'Level', 'V-Shape with Indifference', 'Gaussian']
+            )
+            funcoes_preferencia[criterio] = func
+
+        parametros = {}
+        if func in ['U-Shape', 'V-Shape', 'Level', 'V-Shape with Indifference']:
+            parametros['q'] = st.number_input(
+                f"Limiar de indiferença (q) para {criterio}",
+                min_value=0.0,
+                value=0.1
+            )
+            parametros['r'] = st.number_input(
+                f"Limiar de preferência (r) para {criterio}",
+                min_value=0.0,
+                value=0.5
+            )
+        elif func == 'Gaussian':
+            parametros['s'] = st.number_input(
+                f"Parâmetro s para função Gaussian para {criterio}",
+                min_value=0.1,
+                value=0.5
+            )
+        parametros_preferencia[criterio] = parametros
+
+        for forn in fornecedores_selecionados:
+            if forn not in desempenho:
+                desempenho[forn] = {}
+            if criterio in criterios_qualitativos:
+                desempenho[forn][criterio] = st.slider(
+                    f"Desempenho de {forn} no critério {criterio}",
+                    1, 5, 3
                 )
             else:
-                dados[forn][crit] = st.number_input(
-                    f"Valor quantitativo de {forn} em {crit}",
-                    min_value=0.0, step=0.1
+                desempenho[forn][criterio] = st.number_input(
+                    f"Valor quantitativo de {forn} no critério {criterio}",
+                    min_value=0.0,
+                    step=0.1
                 )
 
-    df = pd.DataFrame(dados).T
+    df = pd.DataFrame(desempenho).T
     st.subheader("Matriz de Desempenho")
     st.dataframe(df)
 
-    # =============================
-    # CÁLCULOS PROMETHEE
-    # =============================
-
-    # Normalização
+    # ==============================
+    # 🔢 Cálculo PROMETHEE II
+    # ==============================
     df_norm = pd.DataFrame()
-    for crit in criterios:
-        if objetivo[crit] == 'Maximizar':
-            df_norm[crit] = (df[crit] - df[crit].min()) / (df[crit].max() - df[crit].min())
+
+    for crit in criterios_selecionados:
+        max_valor = df[crit].max()
+        min_valor = df[crit].min()
+        if max_valor == min_valor:
+            df_norm[crit] = 0
+        elif objetivo[crit] == 'Maximizado':
+            df_norm[crit] = (df[crit] - min_valor) / (max_valor - min_valor)
         else:
-            df_norm[crit] = (df[crit].max() - df[crit]) / (df[crit].max() - df[crit].min())
+            df_norm[crit] = (max_valor - df[crit]) / (max_valor - min_valor)
 
     st.subheader("Matriz Normalizada")
     st.dataframe(df_norm)
 
-    # Fluxos
-    flux_positivo = {f: 0 for f in fornecedores}
-    flux_negativo = {f: 0 for f in fornecedores}
+    # ==============================
+    # ⚙️ Cálculo dos Fluxos
+    # ==============================
+    flux_positivo = {f: 0 for f in fornecedores_selecionados}
+    flux_negativo = {f: 0 for f in fornecedores_selecionados}
 
-    for a in fornecedores:
-        for b in fornecedores:
+    for a in fornecedores_selecionados:
+        for b in fornecedores_selecionados:
             if a != b:
                 soma = 0
-                for crit in criterios:
-                    pref = df_norm.loc[a, crit] - df_norm.loc[b, crit]
-                    soma += pesos[crit] * max(pref, 0)
+                for crit in criterios_selecionados:
+                    diferenca = df_norm.loc[a, crit] - df_norm.loc[b, crit]
+                    pref = aplicar_funcao_preferencia(
+                        funcoes_preferencia[crit],
+                        diferenca,
+                        parametros_preferencia[crit]
+                    )
+                    soma += pesos[crit] * pref
                 flux_positivo[a] += soma
                 flux_negativo[b] += soma
 
-    flux_liquido = {f: flux_positivo[f] - flux_negativo[f] for f in fornecedores}
+    flux_liquido = {f: flux_positivo[f] - flux_negativo[f] for f in fornecedores_selecionados}
 
     resultado = pd.DataFrame({
-        'Fornecedor': fornecedores,
-        'Fluxo Positivo (ϕ+)': [flux_positivo[f] for f in fornecedores],
-        'Fluxo Negativo (ϕ-)': [flux_negativo[f] for f in fornecedores],
-        'Fluxo Líquido (ϕ)': [flux_liquido[f] for f in fornecedores]
+        'Fornecedor': fornecedores_selecionados,
+        'Fluxo Positivo (ϕ+)': [flux_positivo[f] for f in fornecedores_selecionados],
+        'Fluxo Negativo (ϕ-)': [flux_negativo[f] for f in fornecedores_selecionados],
+        'Fluxo Líquido (ϕ)': [flux_liquido[f] for f in fornecedores_selecionados]
     }).sort_values(by='Fluxo Líquido (ϕ)', ascending=False)
 
     st.subheader("Resultado PROMETHEE II")
     st.dataframe(resultado)
 
-    fig = px.bar(resultado, x='Fornecedor', y='Fluxo Líquido (ϕ)', color='Fornecedor',
-                 title="Ranking dos Fornecedores")
+    fig = px.bar(resultado, x='Fornecedor', y='Fluxo Líquido (ϕ)',
+                 title="Ranking dos Fornecedores", color='Fornecedor')
     st.plotly_chart(fig)
 
-
-# =============================
-# CONTROLE DE TELAS
-# =============================
-paginas = ["Tela Inicial", "Sistema PROMETHEE II"]
-selecao = st.sidebar.selectbox("Navegar", paginas)
-
-if selecao == "Tela Inicial":
+# ===================================
+# 🚦 Controle de Telas
+# ===================================
+if "tela_inicial" not in st.session_state or st.session_state.tela_inicial == False:
     tela_inicial()
+    if st.button("Avançar para o Sistema"):
+        st.session_state.tela_inicial = True
 else:
     tela_sistema()
