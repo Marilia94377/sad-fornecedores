@@ -72,24 +72,28 @@ st.markdown(
 # Criteria Descriptions and Qualitative Scales
 # ===================================
 criteria_description = {
-    'C1 - Cost': 'Monetary value in a specific currency. (↓)',
+    'C1 - Cost': 'Monetary cost of the proposal.(↓)',
     'C2 - Quality': 'Subjective quality assessment based on benchmark standards. (↑)',
     'C3 - Delivery': 'Delivery time in days. (↓)',
     'C4 - Technology': 'Level of innovation and adoption of advanced technologies. (↑)',
-    'C5 - Environmental Costs': 'Environmental costs in BRL, such as fines or treatment. (↓)',
-    'C6 - Green Design': 'Degree of adoption of sustainable practices in the project. (↑)',
+    'C5 - Environmental Costs': 'Annual monetary value or percentage of revenue invested in environmental management (e.g., waste treatment, emissions control, certifications). (↓)',
+    'C6 - Green Design': 'Degree of integration of sustainable design practices in the supplier’s products, services, or processes, including choice of materials, production methods, packaging, and lifecycle considerations. (↑)',
     'C7 - Environmental Management': 'Effectiveness of the environmental management system. (↑)',
-    'C8 - Stakeholders': 'Commitment to stakeholder rights and service. (↑)',
-    'C9 - Occupational Health and Safety': 'Rate of workplace accidents or incidents. (↓)',
-    'C10 - Employee Policy Compliance': 'Compliance with employee policies and rights. (↑)',
-    'C11 - Social Management': 'Capacity to implement sustainable social management practices. (↑)',
-    'C12 - Performance History': 'Number of years in operation. (↑)',
+    'C8 - Stakeholders Management': 'Commitment to stakeholder rights and service. (↑)',
+    'C9 - Occupational Health and Safety': (
+        'TRIR calculated according to OSHA methodology (Total Recordable Incident Rate). '
+        'Value provided by the supplier or verified via audit/documentation. (↓)\n\n'
+        'TRIR = (Total number of recordable incidents × 200,000) / Total hours worked by all employees.'
+    ),
+    'C10 - Compliance with Labor Policies': 'Adherence to employee rights, labor laws, and ethical workplace standards, including diversity, inclusion, and non-discrimination measures. Evidence may include labor policy documents, compliance certificates (e.g., SA8000), diversity reports, and complaint-handling procedures. (↑)',
+    'C11 - Social Management': 'Capacity to develop and implement structured social responsibility policies and programs, including community engagement, partnerships with NGOs, and measurable contributions to social well-being. Evidence may include CSR reports, certifications (ISO 26000, SA8000), project portfolios, and investment data. (↑)',
+    'C12 - Performance History': 'Number of years of experience. (↑)',
     'C13 - Reputation': 'Media analysis, reviews, and recognitions. (↑)',
     'C14 - Logistics': 'Distance in kilometers. (↓)'
 }
 
 qualitative_scale = {
-    'C2 - Quality': """| Score | Description |
+    'C2 - Quality': """| Scale Level | Description |
 |------|-------------|
 | 1 | Products/services do not meet quality standards, leading to frequent rework and negative feedback. |
 | 2 | Products/services generally below standard, with occasional issues and mostly negative feedback. |
@@ -98,7 +102,7 @@ qualitative_scale = {
 | 5 | Exceptional products/services, consistently exceeding standards, with highly positive feedback and minimal rejections. |
 """,
 
-    'C4 - Technology': """| Score | Description |
+    'C4 - Technology': """| Scale Level | Description |
 |------|-------------|
 | 1 | No current technology used; manual processes dominate. |
 | 2 | Low technology adoption, with minimal process improvements. |
@@ -107,16 +111,16 @@ qualitative_scale = {
 | 5 | Use of cutting-edge technologies and continuous innovation. |
 """,
 
-    'C6 - Green Design': """| Score | Description |
+    'C6 - Green Design': """| Scale Level | Description |
 |------|-------------|
-| 1 | No concern with sustainability in the project. |
-| 2 | Minimal and occasional sustainable actions. |
-| 3 | Some sustainable initiatives in practices or materials. |
-| 4 | Project incorporates various relevant sustainable practices. |
-| 5 | Project strongly oriented to sustainability in all stages. |
+| 1 | The supplier does not apply any sustainable design principles. Products/services are developed without consideration for environmental impacts, recyclability, or resource efficiency. |
+| 2 | Minimal and occasional sustainable actions in design. Examples: limited use of recyclable materials or occasional waste reduction initiatives. No systematic approach. |
+| 3 | Some sustainable design initiatives are present, such as partial use of eco-friendly materials, basic packaging reduction, or energy efficiency in certain processes. However, these are not applied consistently across all projects. |
+| 4 | Sustainable design principles are incorporated in several key aspects of the supplier’s operations: consistent use of recyclable or renewable materials, reduced energy consumption, optimized packaging, and partial application of lifecycle assessment. |
+| 5 | The supplier’s design approach is fully sustainability-oriented, integrating eco-design principles at every stage: product conception, material selection, manufacturing, packaging, and end-of-life. Includes full lifecycle assessment, zero-waste strategies, renewable energy use, and alignment with international eco-certifications. |
 """,
 
-    'C7 - Environmental Management': """| Score | Description |
+    'C7 - Environmental Management': """| Scale Level | Description |
 |------|-------------|
 | 1 | No structured environmental management system. |
 | 2 | Informal and ineffective system. |
@@ -125,7 +129,7 @@ qualitative_scale = {
 | 5 | Robust, certified system with continuous improvement. |
 """,
 
-    'C8 - Stakeholders': """| Score | Description |
+    'C8 - Stakeholders Management': """| Scale Level | Description |
 |------|-------------|
 | 1 | Ignores stakeholder interests. |
 | 2 | Reactively and minimally responsive. |
@@ -134,25 +138,25 @@ qualitative_scale = {
 | 5 | Transparent, active, and responsible stakeholder involvement. |
 """,
 
-    'C10 - Employee Policy Compliance': """| Score | Description |
+    'C10 - Compliance with Labor Policies': """| Scale Level | Description |
 |------|-------------|
-| 1 | Does not respect basic labor standards. |
-| 2 | Frequent failures in policy compliance. |
-| 3 | Complies with minimum legal requirements. |
-| 4 | Complies with and monitors employee rights and practices. |
-| 5 | Promotes a fair, safe, and participatory environment. |
+| 1 | No formal labor policies; repeated violations in last 3 years. |
+| 2 | Minimal/incomplete policies; limited diversity/inclusion; minor violations. |
+| 3 | Basic policies covering essential rights; some diversity efforts; no serious violations. |
+| 4 | Comprehensive policies aligned with law; active diversity programs; no violations. |
+| 5 | Exemplary policies exceeding legal requirements; diversity and inclusion embedded in culture; recognized certifications or awards. |
 """,
 
-    'C11 - Social Management': """| Score | Description |
+    'C11 - Social Management': """| Scale Level | Description |
 |------|-------------|
-| 1 | No action focused on social well-being. |
-| 2 | Reactive and poorly structured social practices. |
-| 3 | Some social practices implemented. |
-| 4 | Defined and operational social policies. |
-| 5 | Strategic social management with strong positive impact. |
+| 1 | No CSR policies or social initiatives. |
+| 2 | Limited or reactive initiatives with minimal documentation. |
+| 3 | Some structured social programs, but inconsistent execution or limited scope. |
+| 4 | Comprehensive CSR policies with consistent community engagement and documented results. |
+| 5 | Strategic, certified, and impactful CSR programs integrated into corporate culture. |
 """,
 
-    'C13 - Reputation': """| Score | Description |
+    'C13 - Reputation': """| Scale Level | Description |
 |------|-------------|
 | 1 | Very negative or unknown reputation. |
 | 2 | Unfavorable or unstable market image. |
@@ -186,7 +190,7 @@ def compute_promethee_without_normalizing(df, criteria, objective, weights, func
                 d = df.loc[a, crit] - df.loc[b, crit]
 
                 # Invert if criterion is minimization
-                if objective[crit] == 'Minimized':
+                if objective[crit] == 'Minimize':
                     d = -d
 
                 d_matrix[crit][i][j] = d
@@ -373,8 +377,8 @@ def promethee_screen():
             
             with col2:
                 objective[criterion] = st.radio(
-                    f"{criterion} should be:",
-                    ['Maximized', 'Minimized'],
+                    f"Objective of the criterion {criterion}:",
+                    ['Maximize', 'Minimize'],
                     index=0 if '↓' not in criteria_description[criterion] else 1,
                     horizontal=True,
                     key=f"objective_{criterion}"
@@ -592,7 +596,7 @@ def promethee_screen():
             for i in range(n):
                 for j in range(n):
                     d = df.loc[result['Supplier'].iloc[i], crit] - df.loc[result['Supplier'].iloc[j], crit]
-                    if objective[crit] == 'Minimized':
+                    if objective[crit] == 'Minimize':
                         d = -d
 
                     q = preference_parameters[crit].get('q', 0)
@@ -654,3 +658,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
